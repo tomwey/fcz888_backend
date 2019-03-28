@@ -116,6 +116,8 @@
         link: '链接地址'
         sort: '显示顺序'
         opened: '是否上线'
+        title: '标题'
+        page_types: '投放板块'
       message_template:
         tpl_id: '模板ID'
         title: '标题'
