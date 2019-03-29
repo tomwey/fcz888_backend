@@ -54,6 +54,7 @@
       permission_resource: '权限资源'
       permission: '权限点'
       tag: '标签'
+      loan_speed: '放款速度设置'
     attributes:
       user:
         uid: 'ID'
@@ -97,6 +98,11 @@
       tag:
         name: '名字'
         memo: '备注'
+        sort: '排序'
+      loan_speed:
+        name: '名字'
+        score: '分值权重(越小放款越快)'
+        opened: '是否打开'
       message:
         message_template_id: '所属模板'
         content: '内容'
