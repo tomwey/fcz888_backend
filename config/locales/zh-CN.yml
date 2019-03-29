@@ -53,6 +53,7 @@
       profile: '用户资料'
       permission_resource: '权限资源'
       permission: '权限点'
+      tag: '标签'
     attributes:
       user:
         uid: 'ID'
@@ -93,6 +94,9 @@
         action_name: '权限操作中文名'
         memo: '备注'
         need_scope: '是否要限制账号范围'
+      tag:
+        name: '名字'
+        memo: '备注'
       message:
         message_template_id: '所属模板'
         content: '内容'
