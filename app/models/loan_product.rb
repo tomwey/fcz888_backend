@@ -1,5 +1,5 @@
 class LoanProduct < ActiveRecord::Base
-  validates :name, :logo, :speed, :loan_rate, :length_type, :body_url, presence: true
+  validates :name, :logo, :speed, :loan_rate, :length_type, :body_url, :body, presence: true
   validates :min_money, :max_money, :min_length, :max_length, numericality: { only_integer: true }, presence: true
   validates_numericality_of :pass_rate, :loan_rate
   
@@ -50,6 +50,7 @@ class LoanProduct < ActiveRecord::Base
   before_save :remove_blank_value_for_array
   def remove_blank_value_for_array
     self.tags = self.tags.compact.reject(&:blank?)
+    self.conditions = self.conditions.compact.reject(&:blank?)
   end
   
   def loan_duration

@@ -2,7 +2,7 @@ ActiveAdmin.register LoanProduct do
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
-permit_params :name, :logo, :min_money, :max_money, :min_length, :max_length, :length_type, :intro, :speed, :pass_rate, :loan_rate, :body_url, :opened_at, :sort, { tags: [] }
+permit_params :name, :logo, :min_money, :max_money, :min_length, :max_length, :length_type, :intro, :speed, :pass_rate, :loan_rate, :body, :body_url, :opened_at, :sort, { tags: [] }, { conditions: [] }
 #
 # or
 #
@@ -39,6 +39,9 @@ index do
   column '所属标签' do |o|
     o.tag_names.join(',')
   end
+  column '申请条件' do |o|
+    raw(o.condition_names.join('<br>'))
+  end
   column :opened_at
   column :sort
   column '创建时间', :created_at
@@ -60,8 +63,10 @@ form do |f|
     f.input :pass_rate, as: :number, placeholder: '输入贷款审批通过率，单位%'
     f.input :speed, as: :select, collection: LoanSpeed.all.map { |s| [s.name, s.score] }
     f.input :body_url, placeholder: '输入产品推广链接地址', hint: '必须是全地址超链接，例如：http://www.baidu.com'
+    f.input :body, as: :text, input_html: { class: 'redactor' }, placeholder: '网页内容，支持图文混排', hint: '网页内容，支持图文混排'
     f.input :intro, placeholder: '一句话介绍该产品'
     f.input :tags, as: :check_boxes, collection: Tag.all.map { |t| [t.name, t.id] }
+    f.input :conditions, as: :check_boxes, collection: LoanCondition.all.map { |t| [t.name, t.id] }
     f.input :opened_at, as: :string, placeholder: '例如：2019-03-19 12:30', hint: '可选，如果不填，表示立即上线'
     f.input :sort, hint: '值越大，显示越靠前'
     # f.input :body, as: :text, input_html: { class: 'redactor' }, placeholder: '网页内容，支持图文混排', hint: '网页内容，支持图文混排'
