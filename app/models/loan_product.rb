@@ -93,6 +93,10 @@ class LoanProduct < ActiveRecord::Base
     Tag.where(id: tags).pluck(:name)
   end
   
+  def condition_names
+    LoanCondition.where(id: self.conditions).pluck(:name)
+  end
+  
 end
 
 # t.integer :uniq_id
