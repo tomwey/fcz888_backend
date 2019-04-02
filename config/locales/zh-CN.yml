@@ -57,6 +57,8 @@
       loan_speed: '放款速度设置'
       loan_product: '贷款产品'
       loan_condition: '贷款申请条件'
+      bank: '信用卡银行'
+      credit_card: '信用卡'
     attributes:
       user:
         uid: 'ID'
@@ -132,6 +134,24 @@
         icon: '图标'
         name: '名字'
         sort: '排序'
+      bank:
+        icon: 'LOGO'
+        name: '名字'
+        sort: '排序'
+        phone: '电话'
+        products_url: '产品页面地址'
+        home_url: '官网地址'
+      credit_card:
+        bank_id: '所属银行'
+        cover: '卡封面'
+        name: '名字'
+        intro: '简介'
+        special: '特殊说明'
+        apply_url: '申请推广链接'
+        view_count: '浏览数'
+        apply_count: '申请数'
+        opened: '是否上线'
+        sort: '显示顺序'
       message:
         message_template_id: '所属模板'
         content: '内容'
