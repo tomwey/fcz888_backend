@@ -53,6 +53,14 @@ class LoanProduct < ActiveRecord::Base
     self.conditions = self.conditions.compact.reject(&:blank?)
   end
   
+  def format_logo_url
+    if self.logo.blank?
+      ''
+    else
+      self.logo.url(:big)
+    end
+  end
+  
   def loan_duration
     suffix = ''
     if self.length_type == 1 

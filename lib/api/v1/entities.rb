@@ -758,6 +758,27 @@ module API
         expose :view_count, :click_count
       end
       
+      class LoanProduct < Base
+        expose :uniq_id, as: :id
+        expose :name
+        expose :format_logo_url, as: :logo
+        expose :loan_money, as: :money
+        expose :loan_duration, as: :duration
+        expose :format_loan_rate, as: :loan_rate
+        expose :format_pass_rate, as: :pass_rate
+        expose :loan_speed, as: :speed
+        expose :intro
+        expose :tag_names, as: :tags
+        expose :condition_names, as: :conditions
+        expose :view_count
+        expose :order_count, as: :apply_count
+      end
+      
+      class LoanProductDetail < LoanProduct
+        expose :body
+        expose :body_url, as: :link
+      end
+      
       # 供应商
       class Merchant < Base
         expose :merch_id, as: :id
