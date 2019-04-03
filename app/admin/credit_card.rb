@@ -28,6 +28,23 @@ index do
   actions
 end
 
+form do |f|
+  f.semantic_errors
+  f.inputs '基本信息' do
+    f.input :bank_id, as: :select, collection: Bank.all.map { |b| [b.name, b.id] }, required: true
+    f.input :name, placeholder: '信用卡名字'
+    f.input :cover
+    f.input :apply_url
+    f.input :intro, placeholder: '一句话介绍信用卡'
+    f.input :special
+    f.input :view_count
+    f.input :apply_count
+    f.input :sort
+    f.input :opened
+  end
+  actions
+end
+
 end
 
 # t.integer :bank_id, null: false

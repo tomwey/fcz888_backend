@@ -791,6 +791,7 @@ module API
           model.cover.blank? ? '' : model.cover.url(:large)
         end
         expose :name, :intro, :special, :apply_url, :view_count, :apply_count
+        expose :bank, using: API::V1::Entities::Bank
       end
       
       # 供应商
