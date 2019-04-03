@@ -35,7 +35,7 @@ index do
     o.loan_speed
   end
   column :intro, sortable: false
-  column :body_url, sortable: false
+  # column :body_url, sortable: false
   column '所属标签' do |o|
     o.tag_names.join(',')
   end
