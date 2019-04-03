@@ -779,6 +779,20 @@ module API
         expose :body_url, as: :link
       end
       
+      class Bank < Base
+        expose :name, :phone, :products_url, :home_url
+        expose :icon do |model,opts|
+          model.icon.blank? ? '' : model.icon.url(:big)
+        end
+      end
+      
+      class CreditCard < Base
+        expose :cover do |model,opts|
+          model.cover.blank? ? '' : model.cover.url(:large)
+        end
+        expose :name, :intro, :special, :apply_url, :view_count, :apply_count
+      end
+      
       # 供应商
       class Merchant < Base
         expose :merch_id, as: :id

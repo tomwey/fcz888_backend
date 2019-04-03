@@ -98,12 +98,43 @@ module API
             return render_error(4004, '该贷款不存在')
           end
           
+          @product.view_count += 1
+          @product.save
+          
           render_json(@product, API::V1::Entities::LoanProductDetail)
         end # end get body
         
       end # end resource products
       
       resource :cards, desc: '信用卡相关接口' do
+        desc "获取银行"
+        params do
+          optional :token, type: String, desc: "用户登录TOKEN"
+        end
+        get :banks do
+          @banks = Bank.order('sort desc')
+          render_json(@banks, API::V1::Entities::Bank)
+        end # end get banks
+        desc "获取信用卡"
+        params do
+          optional :token, type: String, desc: "用户登录TOKEN"
+          optional :bank_ids,type: String, desc: "所属银行，多个ID用逗号分隔"
+          use :pagination
+        end
+        get do
+          @cards = CreditCard.where(opened: true).order('sort desc')
+          if params[:bank_ids].present?
+            @cards = @cards.where(bank_id: params[:bank_ids].split(','))
+          end
+          
+          if params[:page]
+            @cards = @cards.paginate page: params[:page], per_page: page_size
+            total = @cards.total_entries
+          else
+            total = @cards.size
+          end
+          render_json(@cards, API::V1::Entities::CreditCard, {}, total)
+        end # end get cards
       end # end resource cards
       
     end
