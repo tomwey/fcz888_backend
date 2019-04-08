@@ -72,7 +72,25 @@ class LoanProduct < ActiveRecord::Base
   end
   
   def loan_money
-    self.min_money < self.max_money ? "#{self.min_money}~#{self.max_money}元" : "#{self.min_money}元"
+    if self.min_money < self.max_money
+      if self.min_money >= 10000
+        "#{'%.1f' % (self.min_money / 10000)}万~#{'%.1f' % (self.max_money / 10000)}万"
+      else
+        if self.max_money < 10000
+          "#{self.min_money}~#{self.max_money}元"
+        else
+          "#{self.min_money}~#{'%.1f' % (self.max_money / 10000)}万"
+        end
+      end
+      "#{self.min_money}~#{self.max_money}元"
+    else
+      if self.min_money >= 10000
+        "#{'%.1f' % (self.min_money / 10000)}万"
+      else
+        "#{self.min_money}元"
+      end
+    end
+    # self.min_money < self.max_money ? "#{self.min_money}~#{self.max_money}元" : "#{self.min_money}元"
   end
   
   def format_loan_rate
