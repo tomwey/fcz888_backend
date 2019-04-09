@@ -74,11 +74,11 @@ module API
             @code.activated_at = Time.zone.now
             @code.save!
             
-            has_bind_profile = @user.profile.present?
+            # has_bind_profile = @user.profile.present?
             
             return { code: 0, message: 'ok', data: {
               token: @user.private_token,
-              is_bind: has_bind_profile
+              is_authed: @user.idcard.present?
             } }
           end
           
@@ -132,6 +132,20 @@ module API
           user = authenticate!
           render_json(user, API::V1::Entities::UserProfile)
         end # end get me
+        
+        desc "实名认证"
+        params do
+          requires :token, type: String, desc: "用户认证Token"
+          requires :name,  type: String, desc: "姓名"
+          requires :idcard,type: String, desc: "身份证号"
+        end
+        post '/profile/authorize' do
+          user = authenticate!
+          user.name = params[:name]
+          user.idcard = params[:idcard]
+          user.save!
+          render_json(user, API::V1::Entities::UserProfile)
+        end # end post auth
         
         desc "新增、修改个人资料"
         params do

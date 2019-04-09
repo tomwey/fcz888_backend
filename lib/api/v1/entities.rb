@@ -15,6 +15,9 @@ module API
       class UserBase < Base
         expose :uid, as: :id
         expose :private_token, as: :token
+        expose :is_authed do |model, opts|
+          model.idcard.present?
+        end
       end
       
       # 用户基本信息
@@ -69,40 +72,41 @@ module API
       
       # 用户资料
       class UserProfile < UserBase
-        expose :pid do |model,opts|
-          model.profile.try(:id)
-        end
-        expose :mobile, format_with: :null
-        expose :name do |model, opts|
-          model.profile.try(:name)
-        end
-        expose :idcard do |model, opts|
-          model.profile.try(:idcard)
-        end
-        expose :phone do |model, opts|
-          model.profile.try(:phone)
-        end
-        expose :sex do |model, opts|
-          model.profile.try(:sex)
-        end
-        expose :birth do |model, opts|
-          model.profile.try(:birth)
-        end
-        expose :is_student do |model, opts|
-          model.profile.try(:is_student)
-        end
-        expose :college do |model, opts|
-          model.profile.try(:college)
-        end
-        expose :specialty do |model, opts|
-          model.profile.try(:specialty)
-        end
-        expose :current_pay_name, as: :pay_name
-        expose :current_pay_account, as: :pay_account
+        # expose :pid do |model,opts|
+        #   model.profile.try(:id)
+        # end
+        # expose :mobile, format_with: :null
+        # expose :name do |model, opts|
+        #   model.profile.try(:name)
+        # end
+        # expose :idcard do |model, opts|
+        #   model.profile.try(:idcard)
+        # end
+        # expose :phone do |model, opts|
+        #   model.profile.try(:phone)
+        # end
+        # expose :sex do |model, opts|
+        #   model.profile.try(:sex)
+        # end
+        # expose :birth do |model, opts|
+        #   model.profile.try(:birth)
+        # end
+        # expose :is_student do |model, opts|
+        #   model.profile.try(:is_student)
+        # end
+        # expose :college do |model, opts|
+        #   model.profile.try(:college)
+        # end
+        # expose :specialty do |model, opts|
+        #   model.profile.try(:specialty)
+        # end
+        # expose :current_pay_name, as: :pay_name
+        # expose :current_pay_account, as: :pay_account
         unexpose :private_token, as: :token
-        expose :total_salary_money, as: :total_money, format_with: :money_format
-        expose :sent_salary_money, as: :payed_money, format_with: :money_format
-        expose :senting_salary_money, as: :unpayed_money, format_with: :money_format
+        expose :name, :idcard, :mobile
+        # expose :total_salary_money, as: :total_money, format_with: :money_format
+        # expose :sent_salary_money, as: :payed_money, format_with: :money_format
+        # expose :senting_salary_money, as: :unpayed_money, format_with: :money_format
       end
       # 用户详情
       class User < UserBase
