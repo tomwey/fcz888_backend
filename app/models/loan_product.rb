@@ -127,6 +127,10 @@ class LoanProduct < ActiveRecord::Base
     LoanCondition.where(id: self.conditions).order('sort asc')
   end
   
+  def condition_names
+    LoanCondition.where(id: self.conditions).order('sort asc').pluck(:name)
+  end
+  
 end
 
 # t.integer :uniq_id
