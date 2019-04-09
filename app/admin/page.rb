@@ -1,12 +1,13 @@
 ActiveAdmin.register Page do
 
 # menu parent: 'system'
-menu parent: 'system', priority: 88, label: '网页文档'
+# menu parent: 'system', priority: 88, label: '网页文档'
+# menu priority: 88, label: '网页文档'
 
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
-permit_params :list, :of, [:title, :slug, :body], :on, :model
+permit_params :title, :slug, :body
 
 filter :title
 filter :slug
