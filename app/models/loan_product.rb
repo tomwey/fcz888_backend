@@ -82,7 +82,7 @@ class LoanProduct < ActiveRecord::Base
           "#{self.min_money}~#{'%.1f' % (self.max_money / 10000)}万"
         end
       end
-      "#{self.min_money}~#{self.max_money}元"
+      # "#{self.min_money}~#{self.max_money}元"
     else
       if self.min_money >= 10000
         "#{'%.1f' % (self.min_money / 10000)}万"
@@ -119,8 +119,8 @@ class LoanProduct < ActiveRecord::Base
     Tag.where(id: tags).pluck(:name)
   end
   
-  def condition_names
-    LoanCondition.where(id: self.conditions).pluck(:name)
+  def condition_data
+    LoanCondition.where(id: self.conditions).order('sort asc')
   end
   
 end

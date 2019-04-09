@@ -758,6 +758,13 @@ module API
         expose :view_count, :click_count
       end
       
+      class LoanCondition < Base
+        expose :name
+        expose :logo do |model,opts|
+          model.icon.blank? ? '' : model.icon.url(:large)
+        end
+      end
+      
       class LoanProduct < Base
         expose :uniq_id, as: :id
         expose :name
@@ -769,7 +776,7 @@ module API
         expose :loan_speed, as: :speed
         expose :intro
         expose :tag_names, as: :tags
-        expose :condition_names, as: :conditions
+        expose :condition_data, as: :conditions, using: API::V1::Entities::LoanCondition
         expose :view_count
         expose :order_count, as: :apply_count
       end
