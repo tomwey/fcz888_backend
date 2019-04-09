@@ -21,6 +21,29 @@ module API
         end # end get products
       end # end resource home
       
+      resource :loan, desc: '大额贷款申请' do
+        desc "贷款申请"
+        params do
+          requires :token, type: String, desc: "用户登录TOKEN"
+        end
+        post :apply do
+          user = authenticate!
+          apply = LoanApply.new(user_id: user.id)
+          params.each do |k,v|
+            if apply.has_attribute?(k.to_sym)
+              apply.send "#{k}=", v
+            end
+          end
+          
+          if apply.save
+            render_json_no_data
+          else
+            render_error(5000, '提交失败了！')
+          end
+          
+        end # end post apply
+      end # end resource
+      
       resource :products, desc: '贷款产品相关接口' do
         desc "获取产品列表"
         params do

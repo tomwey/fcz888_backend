@@ -59,6 +59,7 @@
       loan_condition: '贷款申请条件'
       bank: '信用卡银行'
       credit_card: '信用卡'
+      loan_apply: '大额贷款申请'
     attributes:
       user:
         uid: 'ID'
@@ -134,6 +135,18 @@
         icon: '图标'
         name: '名字'
         sort: '排序'
+      loan_apply:
+        name: '姓名'
+        idcard: '身份证号'
+        money: '贷款金额'
+        duration: '贷款期限'
+        loan_type: '贷款类型'
+        credit_status: '信用情况'
+        job: '职业身份'
+        salary_type: '工资发放形式'
+        salary: '银行卡发放工资'
+        work_length: '当前单位工龄'
+        other_info: '持有资料'
       bank:
         icon: 'LOGO'
         name: '名字'
