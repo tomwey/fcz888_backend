@@ -72,6 +72,10 @@ class LoanProduct < ActiveRecord::Base
   end
   
   def loan_money
+    real_loan_money.gsub('.0', '')
+  end
+  
+  def real_loan_money
     if self.min_money < self.max_money
       if self.min_money >= 10000
         "#{'%.1f' % (self.min_money / 10000)}万~#{'%.1f' % (self.max_money / 10000)}万"
