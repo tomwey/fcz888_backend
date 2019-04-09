@@ -104,6 +104,7 @@ module API
         # expose :current_pay_account, as: :pay_account
         unexpose :private_token, as: :token
         expose :name, :idcard, :mobile
+        expose :format_nickname, as: :nickname
         # expose :total_salary_money, as: :total_money, format_with: :money_format
         # expose :sent_salary_money, as: :payed_money, format_with: :money_format
         # expose :senting_salary_money, as: :unpayed_money, format_with: :money_format

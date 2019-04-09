@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   end
   
   def format_nickname
-    auth_profile.try(:nickname) || self.nickname || "ID:#{self.uid}"
+    auth_profile.try(:nickname) || self.nickname || hack_mobile || "ID:#{self.uid}"
     # @ud ||= UserDevice.where(uid: self.uid).first
     # return @ud.try(:uname) || "ID:#{self.uid}"
   end
