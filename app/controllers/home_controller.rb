@@ -23,6 +23,10 @@ class HomeController < ApplicationController
     render text: 'Not found', status: 404, layout: false
   end
   
+  def credit_query
+    redirect_to SiteConfig.credit_query_url
+  end
+  
   def download
     @page = Page.find_by(slug: 'app_download')
     @page_title = @page.title

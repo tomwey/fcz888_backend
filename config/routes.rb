@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get 'app/download' => 'home#download'
   get 'app/install'  => 'home#install'
   
+  get 'credit_query' => 'home#credit_query'
+  
   # 网页文档
   resources :pages, path: :p, only: [:show]
   
