@@ -41,14 +41,15 @@ module API
       class AppVersion < Base
         expose :version
         expose :os
-        expose :changelog do |model, opts|
-          if model.change_log
-            arr = model.change_log.split('</p><p>')
-            arr.map { |s| s.gsub('</p>', '').gsub('<p>', '') }
-          else
-            []
-          end
-        end
+        expose :changelog
+        # expose :changelog do |model, opts|
+        #   if model.change_log
+        #     arr = model.change_log.split('</p><p>')
+        #     arr.map { |s| s.gsub('</p>', '').gsub('<p>', '') }
+        #   else
+        #     []
+        #   end
+        # end
         expose :app_url
         expose :must_upgrade
       end

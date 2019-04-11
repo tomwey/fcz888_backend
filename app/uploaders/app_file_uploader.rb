@@ -4,10 +4,6 @@ class AppFileUploader < BaseUploader
 
   storage :qiniu
   
-  def md5
-    @md5 ||= Digest::MD5.hexdigest model.send(mounted_as).read.to_s
-  end
-  
   def filename
     if super.present?
       "#{secure_token}.#{file.extension}"
@@ -19,7 +15,7 @@ class AppFileUploader < BaseUploader
   end
   
   def extension_white_list
-    %w(zip rar)
+    %w(apk ipa)
   end
   
   protected
