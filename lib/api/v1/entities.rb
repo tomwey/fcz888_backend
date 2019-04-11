@@ -41,7 +41,7 @@ module API
       class AppVersion < Base
         expose :version
         expose :os
-        expose :changelog
+        expose :change_log, as: :changelog
         # expose :changelog do |model, opts|
         #   if model.change_log
         #     arr = model.change_log.split('</p><p>')
