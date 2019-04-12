@@ -864,7 +864,7 @@ module API
         expose :image do |model, opts|
           model.image.url(:large)
         end
-        expose :link, format_with: :null
+        expose :link, format_with: :null, if: proc { |o| o.is_link? }
         expose :loan_product, as: :loan, using: API::V1::Entities::LoanProduct, if: proc { |o| o.is_loan_product? }
         expose :page, using: API::V1::Entities::SimplePage, if: proc { |o| o.is_page? }
         expose :view_count, :click_count
