@@ -754,16 +754,6 @@ module API
       #   end
       # end
       
-      class Banner < Base
-        expose :uniq_id, as: :id
-        expose :image do |model, opts|
-          model.image.url(:large)
-        end
-        expose :link, format_with: :null
-        
-        expose :view_count, :click_count
-      end
-      
       class LoanCondition < Base
         expose :name
         expose :logo do |model,opts|
@@ -867,6 +857,17 @@ module API
         expose :state_info, as: :state
         expose :created_at, as: :time, format_with: :chinese_datetime
         expose :user, using: API::V1::Entities::Author
+      end
+      
+      class Banner < Base
+        expose :uniq_id, as: :id
+        expose :image do |model, opts|
+          model.image.url(:large)
+        end
+        expose :link, format_with: :null
+        expose :loan_product, as: :loan, using: API::V1::Entities::LoanProduct, if: proc { |o| o.is_loan_product? }
+        expose :page, using: API::V1::Entities::SimplePage, if: proc { |o| o.is_page? }
+        expose :view_count, :click_count
       end
       
     end

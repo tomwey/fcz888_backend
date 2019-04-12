@@ -25,6 +25,24 @@ class Banner < ActiveRecord::Base
     self.link && (self.link.start_with?('http://') or self.link.start_with?('https://'))
   end
   
+  def loan_product
+    _,id = self.link.split(':')
+    @product ||= LoanProduct.find_by(uniq_id: id)
+  end
+  
+  def page
+    _,id = self.link.split(':')
+    @product ||= Page.find_by(slug: id)
+  end
+  
+  def is_page?
+    self.link && self.link.start_with?('page:')
+  end
+  
+  def is_loan_product?
+    self.link && (self.link.start_with?('loan:') or self.link.start_with?('product:'))
+  end
+  
   # def is_vote?
   #   self.link && self.link.start_with?('vote://')
   # end
