@@ -28,22 +28,42 @@ class HomeController < ApplicationController
   end
   
   def download
-    @page = Page.find_by(slug: 'app_download')
-    @page_title = @page.title
-    
     if request.from_smartphone?
       if request.os == 'Android'
-        @app_url = "#{app_install_url}"
+        version = AppVersion.where('lower(os) = ?', 'android').where(opened: true).order('version desc').first
+        if version.blank?
+          render text: '没有版本包', status: 404
+        else
+          redirect_to version.app_file.try(:url)
+        end
       elsif request.os == 'iPhone'
         version = AppVersion.where('lower(os) = ?', 'ios').where(opened: true).order('version desc').first
-        @app_url = version.try(:app_url) || "#{app_download_url}"
+        if version.blank?
+          render text: '没有版本包', status: 404
+        else
+          redirect_to version.app_download_url
+        end
       else
-        @app_url = "#{app_download_url}"
+        render text: '禁止访问', status: 403
       end
     else
-      @app_url = "#{app_download_url}"
+      render text: '禁止访问', status: 403
     end
-    
+    # @page = Page.find_by(slug: 'app_download')
+    # @page_title = @page.title
+    #
+    # if request.from_smartphone?
+    #   if request.os == 'Android'
+    #     @app_url = "#{app_install_url}"
+    #   elsif request.os == 'iPhone'
+    #     version = AppVersion.where('lower(os) = ?', 'ios').where(opened: true).order('version desc').first
+    #     @app_url = version.try(:app_url) || "#{app_download_url}"
+    #   else
+    #     @app_url = "#{app_download_url}"
+    #   end
+    # else
+    #   @app_url = "#{app_download_url}"
+    # end
   end
   
   def qrcode_test
