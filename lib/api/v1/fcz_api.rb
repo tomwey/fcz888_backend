@@ -5,6 +5,13 @@ module API
       
       helpers API::SharedParams
       
+      resource :app, desc: '跟APP全局配置相关的接口' do
+        desc "获取配置"
+        get :configs do
+          { code: 0, message: 'ok', data: { card_url: SiteConfig.credit_query_url } }
+        end # end configs
+      end # end resource 
+      
       resource :home, desc: '首页相关接口' do
         desc "获取贷款产品"
         params do
