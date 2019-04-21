@@ -9,7 +9,7 @@ form do |f|
   f.inputs do
     f.input :product_id, as: :select, collection: LoanProduct.all.map { |o| [o.name, o.id] }
     f.input :top_img, hint: '建议尺寸，750x642'
-    f.input :bg_color, placeholder: '#2d2343或rgb(255,234,213)'
+    f.input :bg_color, as: :string, placeholder: '#2d2343或rgb(255,234,213)'
     f.input :bottom_img, hint: '建议图片宽度750'
     f.input :btn_text, placeholder: '如果不填，默认为：立即借款'
     f.input :app_url
