@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   
   # /redpack?id=3848484
   
+  get 'promo/:id' => 'promo#poster'
+  
   namespace :front, path: '' do 
     # 网页认证登录
     get    'login'    => 'sessions#new',       as: :login
