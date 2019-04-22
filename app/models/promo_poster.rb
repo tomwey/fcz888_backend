@@ -1,5 +1,5 @@
 class PromoPoster < ActiveRecord::Base
-  validates :product_id, :top_img, presence: true
+  validates :top_img, presence: true
   mount_uploader :top_img, PosterUploader
   mount_uploader :bottom_img, PosterUploader
   
