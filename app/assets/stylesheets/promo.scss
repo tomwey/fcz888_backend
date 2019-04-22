@@ -72,6 +72,9 @@ html,body {
           width: 50%;
         }
         .code-btn {
+          &.readonly {
+            opacity: 0.6;
+          }
           display: inline-block;
           height: 40px;
           line-height: 40px;
@@ -79,6 +82,9 @@ html,body {
           float: right;
           margin-top: 5px;
           font-size: 16px;
+          cursor: pointer;
+          user-select: none;
+          padding: 0 10px;
         }
       }
       .submit-box {
@@ -90,6 +96,8 @@ html,body {
         color: #fff;
         border-radius: 25px;
         margin-top: 20px;
+        cursor: pointer;
+        user-select: none;
       }
     }
   }

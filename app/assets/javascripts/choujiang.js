@@ -10,14 +10,22 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require turbolinks
-//= require bootstrap
-//= require jquery.rotate
-//= require socket.io-1.3.5.min
-//= require yunba-js-sdk
-//= require jquery.toast.min
-//= require app
+//= require md5
+  
+  window.SBUtils = {
+    getRandomString: function(len) {
+      len = len || 32;
+    　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+    　　var maxPos = $chars.length;
+    　　var pwd = '';
+    　　for (i = 0; i < len; i++) {
+    　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    　　}
+    　　return pwd;
+    },
+    getAccessKey: function(str) {
+      return hex_md5('b800d5284d7c6c33db7324178061138e' + str)
+    }
+  }
 
 
