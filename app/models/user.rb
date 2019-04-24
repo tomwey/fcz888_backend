@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   mount_uploader :avatar, AvatarUploader
   
-  has_one :profile, dependent: :destroy
-  has_many :salaries, dependent: :destroy
+  # has_one :profile, dependent: :destroy
+  # has_many :salaries, dependent: :destroy
   
   before_create :generate_uid_and_private_token
   def generate_uid_and_private_token
