@@ -138,11 +138,23 @@ module API
           requires :token, type: String, desc: "用户认证Token"
           requires :name,  type: String, desc: "姓名"
           requires :idcard,type: String, desc: "身份证号"
+          optional :bank_no,type: String, desc: "银行卡号"
+          optional :bank_mobile,type: String, desc: "银行预留手机"
         end
         post '/profile/authorize' do
           user = authenticate!
+          
+          code,msg = YoudunVerify.verify(params[:name], params[:idcard], params[:bank_no], params[:bank_mobile])
+          if code != 0
+            return render_error(code, msg)
+          end
+          
           user.name = params[:name]
           user.idcard = params[:idcard]
+          user.bank_no = params[:bank_no]
+          user.bank_mobile = params[:bank_mobile]
+          user.bank_info = msg
+          
           user.save!
           render_json(user, API::V1::Entities::UserProfile)
         end # end post auth
