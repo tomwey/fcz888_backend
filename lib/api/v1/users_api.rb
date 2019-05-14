@@ -144,6 +144,10 @@ module API
         post '/profile/authorize' do
           user = authenticate!
           
+          if user.name && user.idcard
+            return render_error(3000, '你已经实名认证过了')
+          end
+          
           code,msg = YoudunVerify.verify(params[:name], params[:idcard], params[:bank_no], params[:bank_mobile])
           if code != 0
             return render_error(code, msg)
