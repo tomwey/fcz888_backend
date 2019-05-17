@@ -61,6 +61,7 @@
       credit_card: '信用卡'
       loan_apply: '大额贷款申请'
       promo_poster: '营销注册页面'
+      channel: '推广渠道'
     attributes:
       user:
         uid: 'ID'
@@ -113,6 +114,13 @@
         btn_text: '按钮文本'
         app_url: 'APP下载地址'
         opened: '是否上线'
+      channel:
+        uniq_id: '渠道号'
+        name: '渠道名字'
+        poster_id: '所属营销注册页面'
+        opened: '是否上线'
+        created_at: '创建时间'
+        updated_at: '更新时间'
       loan_speed:
         name: '名字'
         score: '分值权重(越小放款越快)'
