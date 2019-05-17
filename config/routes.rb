@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   # /redpack?id=3848484
   
   get 'promo/:id' => 'promo#poster'
+  get 'channel/:id' => 'promo#channel'
   
   namespace :front, path: '' do 
     # 网页认证登录

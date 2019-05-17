@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   # has_one :profile, dependent: :destroy
   # has_many :salaries, dependent: :destroy
   
+  belongs_to :channel, foreign_key: :from_chn_id
+  
   before_create :generate_uid_and_private_token
   def generate_uid_and_private_token
     begin

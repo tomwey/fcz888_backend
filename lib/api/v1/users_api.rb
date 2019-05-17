@@ -60,6 +60,7 @@ module API
         params do
           requires :mobile, type: String, desc: '手机号'
           requires :code,   type: String, desc: '验证码'
+          optional :chn_id, type: String, desc: '来源渠道'
         end
         post :login do
           mobile = params[:mobile]
@@ -73,6 +74,14 @@ module API
       
             @code.activated_at = Time.zone.now
             @code.save!
+            
+            if params[:chn_id].present?
+              @chn = Channel.find_by(uniq_id: params[:chn_id])
+              if @chn
+                @user.from_chn_id = @chn.id
+                @user.save!
+              end
+            end
             
             # has_bind_profile = @user.profile.present?
             
