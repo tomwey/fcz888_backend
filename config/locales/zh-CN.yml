@@ -107,6 +107,7 @@
         memo: '备注'
         sort: '排序'
       promo_poster:
+        name: '名字'
         product_id: '所属产品'
         top_img: '顶部图片'
         bottom_img: '底部图片'

@@ -17,8 +17,8 @@ index do
   column('#',:id)
   column :uniq_id, sortable: false
   column :name
-  column '营销模板注册页面' do |o|
-    o.promo_poster.try(:name) || o.promo_poster.id
+  column '营销注册模板' do |o|
+    o.promo_poster ? link_to(o.promo_poster.try(:name) || o.promo_poster.id, "/promo/#{o.promo_poster.uniq_id}", target: '_blank') : ''
   end
   column :opened
   column :created_at
