@@ -12,4 +12,8 @@ class Channel < ActiveRecord::Base
       self.uniq_id = (n.to_s + SecureRandom.random_number.to_s[2..6]).to_i
     end while self.class.exists?(:uniq_id => uniq_id)
   end
+  
+  def share_url
+    ShortUrl.sina("#{SiteConfig.base_url}/channel/#{self.uniq_id}")
+  end
 end

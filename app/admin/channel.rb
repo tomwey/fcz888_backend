@@ -20,6 +20,9 @@ index do
   column '营销注册模板' do |o|
     o.promo_poster ? link_to(o.promo_poster.try(:name) || o.promo_poster.id, "/promo/#{o.promo_poster.uniq_id}", target: '_blank') : ''
   end
+  column '渠道地址' do |o|
+    o.share_url
+  end
   column :opened
   column :created_at
   actions
