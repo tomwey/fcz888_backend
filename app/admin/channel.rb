@@ -12,6 +12,19 @@ permit_params :name, :poster_id, :opened
 #   permitted
 # end
 
+index do
+  selectable_column
+  column('#',:id)
+  column :uniq_id, sortable: false
+  column :name
+  column '营销模板注册页面' do |o|
+    o.promo_poster.try(:name) || o.promo_poster.id
+  end
+  column :opened
+  column :created_at
+  actions
+end
+
 form do |f|
   f.semantic_errors
   f.inputs '基本信息' do
