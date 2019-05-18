@@ -12,6 +12,15 @@ ActiveAdmin.register User do
 #   permitted
 # end
 
+filter :from_chn_id, as: :select, collection: Channel.where(opened: true).map { |c| [c.name, c.id] }
+filter :mobile
+filter :name
+filter :idcard
+filter :bank_no
+filter :bank_mobile
+filter :bank_info
+filter :created_at 
+
 scope :authed, default: true
 scope :unauthed
 scope :all
@@ -32,7 +41,7 @@ index do
   end
   # column :private_token, sortable: false
   column :verified, sortable: false
-  defaults: false do |o|
+  actions defaults: false do |o|
     # item '查看'
     if o.verified
       item "禁用", block_admin_user_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
