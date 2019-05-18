@@ -12,7 +12,7 @@ ActiveAdmin.register User do
 #   permitted
 # end
 
-actions only: :destroy
+actions :index, :destroy
 
 filter :from_chn_id, as: :select, collection: Channel.where(opened: true).map { |c| [c.name, c.id] }
 filter :mobile
