@@ -202,8 +202,8 @@ ActiveAdmin.setup do |config|
   # pages:
   #   config.meta_tags_for_logged_out_pages = {}
   
-  config.before_filter :restore_search_filters, unless: :devise_controller?
-  config.after_filter :save_search_filters, unless: :devise_controller?
+  # config.before_filter :restore_search_filters, unless: :devise_controller?
+  # config.after_filter :save_search_filters, unless: :devise_controller?
 
   # == Removing Breadcrumbs
   #
