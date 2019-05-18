@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   # has_one :profile, dependent: :destroy
   # has_many :salaries, dependent: :destroy
   
+  scope :authed, -> { where('bank_no is not null') }
+  scope :unauthed, -> { where(bank_no: nil) }
+  
   belongs_to :channel, foreign_key: :from_chn_id
   
   before_create :generate_uid_and_private_token

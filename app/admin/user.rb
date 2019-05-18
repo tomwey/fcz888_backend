@@ -12,6 +12,10 @@ ActiveAdmin.register User do
 #   permitted
 # end
 
+scope :authed, default: true
+scope :unauthed
+scope :all
+
 index do
   selectable_column
   column('#',:id)
@@ -25,7 +29,7 @@ index do
   column '银行信息' do |o|
     raw("银行卡号: #{o.bank_no}<br>银行预留手机: #{o.bank_mobile}<br>开卡信息: #{o.bank_info}")
   end
-  column :private_token, sortable: false
+  # column :private_token, sortable: false
   column :verified, sortable: false
   actions
 end
