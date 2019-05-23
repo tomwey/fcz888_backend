@@ -18,7 +18,7 @@ module API
           optional :token, type: String, desc: "用户登录TOKEN"
         end
         get :products do
-          @products = LoanProduct.where(deleted_at: nil).where.not(opened_at: nil).order('sort desc, id desc').limit(10)
+          @products = LoanProduct.where(deleted_at: nil, opened: true).where.not(opened_at: nil).order('sort desc, id desc').limit(10)
           
           suggest = LoanProduct.where(deleted_at: nil).where.not(opened_at: nil).order('RANDOM()').limit(1)
           { code: 0, message: 'ok', data: {
@@ -61,7 +61,7 @@ module API
           use :pagination
         end
         get do
-          @products = LoanProduct.where(deleted_at: nil).where.not(opened_at: nil)
+          @products = LoanProduct.where(deleted_at: nil, opened: true).where.not(opened_at: nil)
           if params[:money].present?
             if !params[:money].include?('-')
               return render_error(-1, '不正确的money参数')
@@ -123,7 +123,7 @@ module API
           requires :id,  type: Integer, desc: "产品ID"
         end
         get '/:id/body' do
-          @product = LoanProduct.where(deleted_at: nil, uniq_id: params[:id]).where.not(opened_at: nil).first
+          @product = LoanProduct.where(deleted_at: nil, opened: true, uniq_id: params[:id]).where.not(opened_at: nil).first
           if @product.blank?
             return render_error(4004, '该贷款不存在')
           end

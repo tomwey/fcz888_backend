@@ -46,7 +46,51 @@ index do
   column :sort
   column '创建时间', :created_at
   
-  actions
+  actions defaults: false do |o|
+    item '查看', admin_loan_product_path(o)
+    item '编辑', edit_admin_loan_product_path(o)
+    item '删除', delete_admin_loan_product_path(o), method: :put, data: { confirm: '你确定吗？' }
+    if o.opened
+      item '下架', close_admin_loan_product_path(o), method: :put, data: { confirm: '你确定吗？' }, class: 'danger'
+    else
+      item '上架', open_admin_loan_product_path(o), method: :put, data: { confirm: '你确定吗？' }
+    end
+  end
+end
+
+# 删除
+batch_action :delete do |ids|
+  batch_action_collection.find(ids).each do |o|
+    o.delete!
+  end
+  redirect_to collection_path, alert: "已删除"
+end
+member_action :delete, method: :put do
+  resource.delete!
+  redirect_to collection_path, notice: '删除成功'
+end
+
+# 上架
+batch_action :open do |ids|
+  batch_action_collection.find(ids).each do |o|
+    o.open!
+  end
+  redirect_to collection_path, alert: "已上架"
+end
+member_action :open, method: :put do
+  resource.open!
+  redirect_to collection_path, notice: '上架成功'
+end
+# 下架
+batch_action :close do |ids|
+  batch_action_collection.find(ids).each do |o|
+    o.close!
+  end
+  redirect_to collection_path, alert: "已下架"
+end
+member_action :close, method: :put do
+  resource.close!
+  redirect_to collection_path, notice: '下架成功'
 end
 
 form do |f|

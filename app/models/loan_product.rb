@@ -5,6 +5,8 @@ class LoanProduct < ActiveRecord::Base
   
   mount_uploader :logo, AvatarUploader
   
+  default_scope -> { where(deleted_at: nil) }
+  
   LENGTH_TYPEs = [['按天计算', 1], ['按月计算', 2]]
   
   validate :min_value_gt_0
@@ -129,6 +131,21 @@ class LoanProduct < ActiveRecord::Base
   
   def condition_names
     LoanCondition.where(id: self.conditions).order('sort asc').pluck(:name)
+  end
+  
+  def delete!
+    self.deleted_at = Time.zone.now
+    self.save!
+  end
+  
+  def open!
+    self.opened = true
+    self.save!
+  end
+  
+  def close!
+    self.opened = false
+    self.save!
   end
   
 end
