@@ -34,14 +34,14 @@ index do
   column '放款速度' do |o|
     o.loan_speed
   end
-  column :intro, sortable: false
+  # column :intro, sortable: false
   # column :body_url, sortable: false
-  column '所属标签' do |o|
-    o.tag_names.join(',')
-  end
-  column '申请条件' do |o|
-    raw(o.condition_names.join('<br>'))
-  end
+  # column '所属标签' do |o|
+  #   o.tag_names.join(',')
+  # end
+  # column '申请条件' do |o|
+  #   raw(o.condition_names.join('<br>'))
+  # end
   column :opened_at
   column :sort
   column '创建时间', :created_at
