@@ -26,8 +26,8 @@ module API
     before do
       header['Access-Control-Allow-Origin'] = '*'
       header['Access-Control-Allow-Methods'] = '*'
-      # header['Access-Control-Request-Method'] = '*'
-      header['Access-Control-Allow-Headers'] = 'Origin,Accept,Content-Type,X-Requested-With,X-CSRF-Token'#'Content-Type'#'Authorization' # fixed angular 2 isTrusted: true bug
+      header['Access-Control-Request-Method'] = '*'
+      header['Access-Control-Allow-Headers'] = 'Origin,Accept,Content-Type,X-Requested-With,Authorization'#'Content-Type'#'Authorization' # fixed angular 2 isTrusted: true bug
       # header 'X-Robots-Tag', 'noindex'
     end # end before
     
