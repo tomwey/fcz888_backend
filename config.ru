@@ -9,6 +9,15 @@
 #
 # use Unicorn::WorkerKiller::Oom, (192*(1024**2)), (256*(1024**2))
 
+require 'rack/cors'
+
+use Rack::Cors do
+  allow do
+    origins '*'
+    resource '/api/*', :headers => :any, :methods => [:get, :post, :options, :put]
+  end
+end
+
 require ::File.expand_path('../config/environment',  __FILE__)
 run Rails.application
 
