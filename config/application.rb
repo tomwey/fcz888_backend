@@ -15,6 +15,7 @@ Bundler.require(*Rails.groups)
 
 module CentralServices
   class Application < Rails::Application
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -50,7 +51,7 @@ module CentralServices
         resource '/api/*', headers: :any, methods: [:get, :post, :put, :delete, :destroy, :options]
       end
     end
-    
+
     config.middleware.insert 0, Rack::UTF8Sanitizer
     
     # 解析xml参数到hash，需要旧的gem支持: actionpack-xml_parser
