@@ -19,6 +19,10 @@ class HomeController < ApplicationController
     end
   end
   
+  def apply_history
+    render text: '即将上线...'
+  end
+  
   def error_404
     render text: 'Not found', status: 404, layout: false
   end

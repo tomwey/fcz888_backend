@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   get 'promo/:id' => 'promo#poster'
   get 'channel/:id' => 'promo#channel'
   
+  get 'apply/histories' => 'home#apply_history'
+  
   namespace :front, path: '' do 
     # 网页认证登录
     get    'login'    => 'sessions#new',       as: :login
