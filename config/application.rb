@@ -47,7 +47,7 @@ module CentralServices
     config.middleware.use Rack::Cors do
       allow do
         origins '*'
-        resource '/api/*', headers: :any, methods: [:get, :post, :put, :delete, :destroy]
+        resource '/api/*', headers: :any, methods: [:get, :post, :put, :delete, :destroy, :options]
       end
     end
     

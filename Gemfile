@@ -65,9 +65,6 @@ gem 'redis-namespace'
 # 将一些数据存放入 Redis
 gem 'redis-objects'
 
-# 支持跨域
-gem 'rack-cors'
-
 # 队列处理消息发送
 gem 'sidekiq'
 # gem 'sinatra', :require => nil
