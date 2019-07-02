@@ -775,6 +775,7 @@ module API
         expose :condition_data, as: :conditions, using: API::V1::Entities::LoanCondition
         expose :view_count
         expose :order_count, as: :apply_count
+        expose :body_url, as: :link
       end
       
       class LoanProductDetail < LoanProduct
