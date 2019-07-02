@@ -175,7 +175,7 @@ module API
          #  requires :cid, type: Integer, desc: '渠道ID'
          requires :key, type: String, desc: '活动或其他相关信息'
         end
-        get '/:id' do
+        get do
           string = EncryptUtils.decode(SiteConfig.enc_key, SiteConfig.enc_dec_key, params[:key])
           if string.blank?
             return render_error(-1, '不正确的key参数')
