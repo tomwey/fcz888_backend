@@ -63,6 +63,7 @@
       promo_poster: '营销注册页面'
       channel: '推广渠道'
       promo_template: '推广模板'
+      promo_channel: '分销渠道'
     attributes:
       user:
         uid: '用户ID'
@@ -100,6 +101,15 @@
       promo_template:
         name: '名字'
         image: '宣传图'
+      promo_channel:
+        id: '序号'
+        uniq_id: '渠道ID'
+        name: '名字'
+        mobile: '登录手机'
+        password: '密码'
+        password_confirmation: '确认密码'
+        opened: '是否启用账号'
+        created_at: '创建时间'
       permission_resource:
         id: 'ID'
         func_name: '资源中文名'
