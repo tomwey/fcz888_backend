@@ -43,4 +43,8 @@ class PromoEvent < ActiveRecord::Base
     @promo_products ||= LoanProduct.where(id: promo_product_ids, opened: true, deleted_at: nil).order('sort desc,id desc')
   end
   
+  def channels
+    @channels ||= PromoChannel.where(opened: true, id: channel_ids)
+  end
+  
 end

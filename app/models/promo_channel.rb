@@ -17,4 +17,12 @@ class PromoChannel < ActiveRecord::Base
     end while self.class.exists?(:uniq_id => uniq_id)
     self.private_token = SecureRandom.uuid.gsub('-', '')
   end
+  
+  def share_url(event)
+    key = "#{event.uniq_id}|#{self.uniq_id}"
+    key = EncryptUtils.encode(SiteConfig.enc_key, SiteConfig.enc_dec_key, key)
+    url = ShortUrl.sina("#{SiteConfig.share_base_url}?key=#{key}")
+    # puts url
+    url
+  end
 end

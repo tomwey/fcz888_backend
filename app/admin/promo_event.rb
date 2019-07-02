@@ -12,6 +12,35 @@ permit_params :name, { channel_ids: [] }, :promo_template_id, { promo_product_id
 #   permitted
 # end
 
+index do
+  selectable_column
+  column :id
+  column '广告封面', sortable: false do |o|
+    o.promo_template ? image_tag(o.promo_template.image.url(:small), size: '80x142') : ''
+  end
+  column :uniq_id, sortable: false
+  column :name, sortable: false
+  column '推广的产品', sortable: false do |o|
+    html = ''
+    o.promo_products.each do |p|
+      html += p.name + '<br>'
+    end
+    raw(html)
+  end
+  column '渠道链接', sortable: false do |o|
+    html = ''
+    o.channels.each do |c|
+      html += "<p><strong>#{c.name}</strong>: #{c.share_url(o)}</p>"
+    end
+    raw(html)
+  end
+  column '浏览数', :view_count
+  column '点击数', :take_count
+  # column :mobile, sortable: false
+  column :created_at
+  actions
+end
+
 form do |f|
   f.semantic_errors
   f.inputs '基本信息' do

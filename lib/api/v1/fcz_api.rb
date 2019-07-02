@@ -168,18 +168,25 @@ module API
         end # end get cards
       end # end resource cards
       
-      resource :events, desc: '推广活动相关接口' do
+      resource :event, desc: '推广活动相关接口' do
         desc "获取活动详情"
         params do
-          requires :id, type: Integer, desc: '活动ID'
-          requires :cid, type: Integer, desc: '渠道ID'
+          # requires :id, type: Integer, desc: '活动ID'
+         #  requires :cid, type: Integer, desc: '渠道ID'
+         requires :key, type: String, desc: '活动或其他相关信息'
         end
         get '/:id' do
-          @event = PromoEvent.find_by(uniq_id: params[:id], opened: true)
+          string = EncryptUtils.decode(SiteConfig.enc_key, SiteConfig.enc_dec_key, params[:key])
+          if string.blank?
+            return render_error(-1, '不正确的key参数')
+          end
+          id = string.split('|')[0]
+          cid = string.split('|')[1]
+          @event = PromoEvent.find_by(uniq_id: id, opened: true)
           if @event.blank?
             return render_error(4004, '推广活动不存在')
           end
-          @channel = PromoChannel.where(opened: true, uniq_id: params[:cid]).first
+          @channel = PromoChannel.where(opened: true, uniq_id: cid).first
           if @channel.blank?
             return render_error(4004, '渠道不存在')
           end
@@ -193,17 +200,24 @@ module API
         
         desc "活动或产品追踪"
         params do
-          requires :id, type: Integer, desc: '活动ID'
-          requires :cid, type: Integer, desc: '渠道ID'
+          # requires :id, type: Integer, desc: '活动ID'
+          # requires :cid, type: Integer, desc: '渠道ID'
+          requires :key, type: String, desc: '活动或其他相关信息'
           requires :action, type: String, desc: '操作行为'
           optional :pid, type: Integer, desc: '产品ID'
         end
-        post '/:id' do
-          @event = PromoEvent.find_by(uniq_id: params[:id], opened: true)
+        post :log do
+          string = EncryptUtils.decode(SiteConfig.enc_key, SiteConfig.enc_dec_key, params[:key])
+          if string.blank?
+            return render_error(-1, '不正确的key参数')
+          end
+          id = string.split('|')[0]
+          cid = string.split('|')[1]
+          @event = PromoEvent.find_by(uniq_id: id, opened: true)
           if @event.blank?
             return render_error(4004, '推广活动不存在')
           end
-          @channel = PromoChannel.where(opened: true, uniq_id: params[:cid]).first
+          @channel = PromoChannel.where(opened: true, uniq_id: cid).first
           if @channel.blank?
             return render_error(4004, '渠道不存在')
           end
