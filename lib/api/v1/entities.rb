@@ -782,6 +782,20 @@ module API
         expose :body_url, as: :link
       end
       
+      class PromoTemplate < Base
+        expose :name
+        expose :image do |model,opts|
+          model.image.url(:big)
+        end
+      end
+      
+      class PromoEvent < Base
+        expose :uniq_id, as: :id
+        expose :name
+        expose :promo_template, as: :template, using: API::V1::Entities::PromoTemplate
+        expose :promo_products, as: :products, using: API::V1::Entities::LoanProduct
+      end
+      
       class Bank < Base
         expose :name, :phone, :products_url, :home_url
         expose :icon do |model,opts|

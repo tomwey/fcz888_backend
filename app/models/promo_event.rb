@@ -1,6 +1,8 @@
 class PromoEvent < ActiveRecord::Base
   validates :name, presence: true
   
+  belongs_to :promo_template
+  
   validate :array_not_empty
   def array_not_empty
     self.channel_ids = self.channel_ids.compact.reject(&:blank?)
@@ -37,5 +39,8 @@ class PromoEvent < ActiveRecord::Base
     self.promo_product_ids = self.promo_product_ids.compact.reject(&:blank?)
   end
   
+  def promo_products
+    @promo_products ||= LoanProduct.where(id: promo_product_ids, opened: true, deleted_at: nil).order('sort desc,id desc')
+  end
   
 end

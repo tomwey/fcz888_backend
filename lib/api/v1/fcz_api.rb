@@ -1,4 +1,5 @@
 # require 'rest-client'
+require "rack/user_agent"
 module API
   module V1
     class FczAPI < Grape::API
@@ -166,6 +167,73 @@ module API
           render_json(@cards, API::V1::Entities::CreditCard, {}, total)
         end # end get cards
       end # end resource cards
+      
+      resource :events, desc: '推广活动相关接口' do
+        desc "获取活动详情"
+        params do
+          requires :id, type: Integer, desc: '活动ID'
+          requires :cid, type: Integer, desc: '渠道ID'
+        end
+        get '/:id' do
+          @event = PromoEvent.find_by(uniq_id: params[:id], opened: true)
+          if @event.blank?
+            return render_error(4004, '推广活动不存在')
+          end
+          @channel = PromoChannel.where(opened: true, uniq_id: params[:cid]).first
+          if @channel.blank?
+            return render_error(4004, '渠道不存在')
+          end
+          
+          unless @event.channel_ids.include? @channel.id
+            return render_error(4000, '渠道无该活动访问权限')
+          end
+          
+          render_json(@event, API::V1::Entities::PromoEvent)
+        end # end get
+        
+        desc "活动或产品追踪"
+        params do
+          requires :id, type: Integer, desc: '活动ID'
+          requires :cid, type: Integer, desc: '渠道ID'
+          requires :action, type: String, desc: '操作行为'
+          optional :pid, type: Integer, desc: '产品ID'
+        end
+        post '/:id' do
+          @event = PromoEvent.find_by(uniq_id: params[:id], opened: true)
+          if @event.blank?
+            return render_error(4004, '推广活动不存在')
+          end
+          @channel = PromoChannel.where(opened: true, uniq_id: params[:cid]).first
+          if @channel.blank?
+            return render_error(4004, '渠道不存在')
+          end
+          
+          unless @event.channel_ids.include? @channel.id
+            return render_error(4000, '渠道无该活动访问权限')
+          end
+          if params[:pid].present?
+            # 统计产品点击
+            product = LoanProduct.find_by(uniq_id: params[:pid], opened: true)
+            if product
+              LoanProductTrack.create(event_id: @event.id, channel_id: @channel.id, product_id: product.id, ip: client_ip, user_agent: request.user_agent, os: request.os, os_version: request.os_version)
+            end
+          else
+            # 统计活动事件
+            if params[:action] == 'view'
+              PromoEventTrack.create!(promo_event_id: @event.id, promo_channel_id: @channel.id, action:  params[:action], ip: client_ip, user_agent: request.user_agent, os: request.os, os_version: request.os_version)
+              @event.view_count += 1
+              @event.save!
+            elsif params[:action] == 'click'
+              PromoEventTrack.create!(promo_event_id: @event.id, promo_channel_id: @channel.id, action:  params[:action], ip: client_ip, user_agent: request.user_agent, os: request.os, os_version: request.os_version)
+              @event.take_count += 1
+              @event.save!
+            else
+              return render_error(5000, '不支持的action')
+            end
+          end
+          render_json_no_data
+        end
+      end # end resource
       
     end
   end
