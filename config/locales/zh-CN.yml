@@ -62,8 +62,9 @@
       loan_apply: '大额贷款申请'
       promo_poster: '营销注册页面'
       channel: '推广渠道'
-      promo_template: '推广模板'
+      promo_template: '分销推广模板'
       promo_channel: '分销渠道'
+      promo_event: '分销推广活动'
     attributes:
       user:
         uid: '用户ID'
@@ -109,6 +110,15 @@
         password: '密码'
         password_confirmation: '确认密码'
         opened: '是否启用账号'
+        created_at: '创建时间'
+      promo_event:
+        id: '序号'
+        uniq_id: '活动ID'
+        name: '名字'
+        channel_ids: '所属渠道'
+        promo_template_id: '推广模板'
+        promo_product_ids: '贷超产品'
+        opened: '是否发布'
         created_at: '创建时间'
       permission_resource:
         id: 'ID'
