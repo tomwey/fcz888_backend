@@ -62,6 +62,7 @@
       loan_apply: '大额贷款申请'
       promo_poster: '营销注册页面'
       channel: '推广渠道'
+      promo_template: '推广模板'
     attributes:
       user:
         uid: '用户ID'
@@ -96,6 +97,9 @@
         specialty: '专业'
         created_at: '创建时间'
         updated_at: '更新时间'
+      promo_template:
+        name: '名字'
+        image: '宣传图'
       permission_resource:
         id: 'ID'
         func_name: '资源中文名'
