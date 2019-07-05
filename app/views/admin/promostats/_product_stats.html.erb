@@ -8,6 +8,7 @@ today_uv = LoanProductTrack.where(created_at: Time.zone.now.beginning_of_day..Ti
 yes_pv = LoanProductTrack.where(created_at: (Time.zone.now - 1.days).beginning_of_day..(Time.zone.now - 1.days).end_of_day).count
 yes_uv = LoanProductTrack.where(created_at: (Time.zone.now - 1.days).beginning_of_day..(Time.zone.now - 1.days).end_of_day).count('DISTINCT concat(ip,user_agent)')
 
+# 按时间统计
 pv_hash = LoanProductTrack.order('DATE(created_at)').group("DATE(created_at)").where('DATE(created_at) <= ?', Time.zone.now.to_date).count()
 
 uv_hash = LoanProductTrack.order('DATE(created_at)').group("DATE(created_at)").where('DATE(created_at) <= ?', Time.zone.now.to_date).count('DISTINCT concat(ip,user_agent)')
@@ -16,12 +17,54 @@ dates = []
 pv_data = []
 uv_data = []
 
+puv_data = []
+
 days = 30
 days.times do |n|
   date = (Time.zone.now - (days - n - 1).days).to_date
   pv_data << (pv_hash[date] || 0).to_s
   uv_data << (uv_hash[date] || 0).to_s
   dates << date.to_s
+  puv_data << { date: date.to_s, pv: (pv_hash[date] || 0).to_s, uv: (uv_hash[date] || 0).to_s }
+end
+
+# 按渠道统计
+chn_ids = LoanProductTrack.pluck(:channel_id).uniq
+chns = PromoChannel.where(id: chn_ids).pluck(:id, :name, :uniq_id)
+chn_pv_hash = LoanProductTrack.group("channel_id").count()
+chn_uv_hash = LoanProductTrack.group("channel_id").count('distinct concat(ip,user_agent)')
+
+chn_names = []
+chn_pv_data = []
+chn_uv_data = []
+
+chn_data = []
+
+chns.each do |chn|
+  chn_names << chn[1]
+  chn_pv_data << (chn_pv_hash[chn[0]] || 0).to_s
+  chn_uv_data << (chn_uv_hash[chn[0]] || 0).to_s
+  chn_data << { name: chn[1], id: chn[2], pv: (chn_pv_hash[chn[0]] || 0).to_s, uv: (chn_uv_hash[chn[0]] || 0).to_s }
+end
+
+# 按产品统计
+product_ids = LoanProductTrack.pluck(:product_id).uniq
+products = LoanProduct.where(id: product_ids).select(:id, :name, :logo, :uniq_id)
+
+prod_pv_hash = LoanProductTrack.group("product_id").count()
+prod_uv_hash = LoanProductTrack.group("product_id").count('distinct concat(ip,user_agent)')
+
+prod_names = []
+prod_pv_data = []
+prod_uv_data = []
+
+prod_data = []
+
+products.each do |prod|
+  prod_names << prod.name
+  prod_pv_data << (prod_pv_hash[prod.id] || 0).to_s
+  prod_uv_data << (prod_uv_hash[prod.id] || 0).to_s
+  prod_data << { name: prod.name, id: prod.uniq_id, pv: (prod_pv_hash[prod.id] || 0).to_s, uv: (prod_uv_hash[prod.id] || 0).to_s, logo: prod.logo.url(:large) }
 end
 
  %>
@@ -55,39 +98,120 @@ end
   <div class="stat-graph">
     <h4>近30天产品推广汇总</h4>
     <div id="graph2" style="width: 100%; height: 300px;"></div>
+    <div class="list">
+      <table class="index_table">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>PV</th>
+            <th>UV</th>
+          </tr>
+        </thead>
+        <% puv_data.reverse.each do |data| %>
+        <tr>
+          <td><%= data[:date] %></td>
+          <td><%= data[:pv] %></td>
+          <td><%= data[:uv] %></td>
+        </tr>
+        <% end %>
+      </table>
+    </div>
+    <h4>按渠道汇总</h4>
+    <div id="graph3" style="width: 100%; height: 300px;"></div>
+    <div class="list">
+      <table class="index_table">
+        <thead>
+          <tr>
+            <th>渠道ID</th>
+            <th>渠道名字</th>
+            <th>PV</th>
+            <th>UV</th>
+          </tr>
+        </thead>
+        <% chn_data.reverse.each do |data| %>
+        <tr>
+          <td><%= data[:id] %></td>
+          <td><%= data[:name] %></td>
+          <td><%= data[:pv] %></td>
+          <td><%= data[:uv] %></td>
+        </tr>
+        <% end %>
+      </table>
+    </div>
+    
+    <!-- 按产品 -->
+    <h4>按产品汇总</h4>
+    <div id="graph4" style="width: 100%; height: 300px;"></div>
+    <div class="list">
+      <table class="index_table">
+        <thead>
+          <tr>
+            <th>产品ID</th>
+            <th>产品信息</th>
+            <th>PV</th>
+            <th>UV</th>
+          </tr>
+        </thead>
+        <% chn_data.reverse.each do |data| %>
+        <tr>
+          <td><%= data[:id] %></td>
+          <td>
+            <div style="text-align:center">
+              <img src="<%= data[:logo] %>">
+              <p><%= data[:name] %></p>
+            </div>
+          </td>
+          <td><%= data[:pv] %></td>
+          <td><%= data[:uv] %></td>
+        </tr>
+        <% end %>
+      </table>
+    </div>
+    
+    
+    
   </div>
 </div>
 <script src="https://cdn.bootcss.com/echarts/4.2.1/echarts.min.js"></script>
 <script>
-  var option = {
-    tooltip: {
-      show: true
-    },
-    legend: {
-      data:['PV','UV']
-    },
-    xAxis: {
-      type: 'category',
-      data: JSON.parse('<%= raw dates.to_json %>')
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        name: 'PV',
-        data: JSON.parse('<%= raw pv_data.to_json %>'),
-        type: 'line',
-        smooth: true
+  function drawLineGraph(eleID, xAxisData, pvData, uvData) {
+    var option = {
+      tooltip: {
+        show: true
       },
-      {
-        name: 'UV',
-        data: JSON.parse('<%= raw uv_data.to_json %>'),
-        type: 'line',
-        smooth: true
-      }
-    ]
-  };
-  var myChart = echarts.init(document.getElementById('graph2'));
-  myChart.setOption(option);
+      legend: {
+        data:['PV','UV']
+      },
+      xAxis: {
+        type: 'category',
+        data: JSON.parse(xAxisData)
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          name: 'PV',
+          data: JSON.parse(pvData),
+          type: 'line',
+          smooth: true
+        },
+        {
+          name: 'UV',
+          data: JSON.parse(uvData),
+          type: 'line',
+          smooth: true
+        }
+      ]
+    };
+    var myChart = echarts.init(document.getElementById(eleID));
+    myChart.setOption(option);
+  }
+  
+  drawLineGraph('graph2', '<%= raw dates.to_json %>', '<%= raw pv_data.to_json %>', '<%= raw uv_data.to_json %>');
+  
+  drawLineGraph('graph3', '<%= raw chn_names.to_json %>', '<%= raw chn_pv_data.to_json %>', '<%= raw chn_uv_data.to_json %>');
+  
+  drawLineGraph('graph4', '<%= raw prod_names.to_json %>', '<%= raw prod_pv_data.to_json %>', '<%= raw prod_uv_data.to_json %>');
+  
 </script>
