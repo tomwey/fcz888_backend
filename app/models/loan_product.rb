@@ -63,6 +63,22 @@ class LoanProduct < ActiveRecord::Base
     end
   end
   
+  def today_pv
+    LoanProductTrack.where(product_id: self.id, created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
+  end
+  
+  def today_uv
+    LoanProductTrack.where(product_id: self.id, created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count('distinct concat(ip, user_agent)')
+  end
+  
+  def total_pv
+    LoanProductTrack.where(product_id: self.id).count
+  end
+  
+  def total_uv
+    LoanProductTrack.where(product_id: self.id).count('distinct concat(ip, user_agent)')
+  end
+  
   def loan_duration
     suffix = ''
     if self.length_type == 1 

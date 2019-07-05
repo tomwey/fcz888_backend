@@ -34,6 +34,9 @@ index do
   column '放款速度' do |o|
     o.loan_speed
   end
+  column 'PV/UV' do |o|
+    raw("PV: #{o.today_pv}/#{o.total_pv}<br>UV: #{o.today_uv}/#{o.total_uv}")
+  end
   # column :intro, sortable: false
   # column :body_url, sortable: false
   # column '所属标签' do |o|
