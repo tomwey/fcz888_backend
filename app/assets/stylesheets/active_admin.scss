@@ -362,3 +362,25 @@ a.member_link, .table_actions a {
   background-repeat: no-repeat;
   cursor: pointer; 
 }
+
+.event-stats {
+  .row {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    .col {
+      flex: 1;
+//      text-align: center;
+    }
+    .name {
+      font-size: 14px;
+      color: #999;
+    }
+    .value {
+      font-size: 22px;
+      color: #333;
+      font-weight: 700;
+      font-family: 'PingFang SC';
+    }
+  }
+}

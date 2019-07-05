@@ -1,0 +1,88 @@
+<% 
+total_views = PromoEvent.where(opened: true).sum(:view_count)
+total_clicks = PromoEvent.where(opened: true).sum(:take_count)
+
+today_views = PromoEventTrack.where(action: 'view', created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
+yes_views = PromoEventTrack.where(action: 'view', created_at: (Time.zone.now - 1.days).beginning_of_day..(Time.zone.now - 1.days).end_of_day).count
+
+today_clicks = PromoEventTrack.where(action: 'click', created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
+yes_clicks = PromoEventTrack.where(action: 'click', created_at: (Time.zone.now - 1.days).beginning_of_day..(Time.zone.now - 1.days).end_of_day).count
+
+views_hash = PromoEventTrack.order('DATE(created_at)').group("DATE(created_at)").where(action: 'view').where('DATE(created_at) <= ?', Time.zone.now.to_date).count
+
+clicks_hash = PromoEventTrack.order('DATE(created_at)').group("DATE(created_at)").where(action: 'click').where('DATE(created_at) <= ?', Time.zone.now.to_date).count
+
+dates = []
+views = []
+clicks = []
+
+days = 30
+days.times do |n|
+  date = (Time.zone.now - (days - n - 1).days).to_date
+  views << (views_hash[date] || 0).to_s
+  clicks << (clicks_hash[date] || 0).to_s
+  dates << date.to_s
+end
+
+ %>
+<div class="event-stats">
+  <div class="row">
+    <div class="col">
+      <div class="value"><%= total_views %></div>
+      <div class="name">总浏览数</div>
+    </div>
+    <div class="col">
+      <div class="value"><%= yes_views %></div>
+      <div class="name">昨日浏览</div>
+    </div>
+    <div class="col">
+      <div class="value"><%= today_views %></div>
+      <div class="name">今日浏览</div>
+    </div>
+    <div class="col">
+      <div class="value"><%= total_clicks %></div>
+      <div class="name">总点击数</div>
+    </div>
+    <div class="col">
+      <div class="value"><%= yes_clicks %></div>
+      <div class="name">昨日点击</div>
+    </div>
+    <div class="col">
+      <div class="value"><%= today_clicks %></div>
+      <div class="name">今日点击</div>
+    </div>
+  </div>
+  <div class="stat-graph">
+    <h4>近7天活动浏览与点击汇总</h4>
+    <div id="graph" style="width: 100%; height: 300px;"></div>
+  </div>
+</div>
+<script src="https://cdn.bootcss.com/echarts/4.2.1/echarts.min.js"></script>
+<script>
+  var option = {
+    legend: {
+      data:['浏览数','点击数']
+    },
+    xAxis: {
+      type: 'category',
+      data: JSON.parse('<%= raw dates.to_json %>')
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name: '浏览数',
+        data: JSON.parse('<%= raw views.to_json %>'),
+        type: 'line'
+      },
+      {
+        name: '点击数',
+        data: JSON.parse('<%= raw clicks.to_json %>'),
+        type: 'line'
+      }
+    ]
+  };
+  var myChart = echarts.init(document.getElementById('graph'));
+  myChart.setOption(option);
+</script>

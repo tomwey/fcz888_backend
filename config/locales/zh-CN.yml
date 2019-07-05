@@ -63,7 +63,7 @@
       promo_poster: '营销注册页面'
       channel: '推广渠道'
       promo_template: '分销推广模板'
-      promo_channel: '分销渠道'
+      promo_channel: '分销推广渠道'
       promo_event: '分销推广活动'
     attributes:
       user:
