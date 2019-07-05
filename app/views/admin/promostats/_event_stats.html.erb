@@ -53,13 +53,16 @@ end
     </div>
   </div>
   <div class="stat-graph">
-    <h4>近7天活动浏览与点击汇总</h4>
+    <h4>近30天推广活动汇总</h4>
     <div id="graph" style="width: 100%; height: 300px;"></div>
   </div>
 </div>
 <script src="https://cdn.bootcss.com/echarts/4.2.1/echarts.min.js"></script>
 <script>
   var option = {
+    tooltip: {
+      show: true
+    },
     legend: {
       data:['浏览数','点击数']
     },

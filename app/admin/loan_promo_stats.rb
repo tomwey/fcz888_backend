@@ -13,6 +13,13 @@ ActiveAdmin.register_page "PromoStats" do
     end
     
     # 贷款产品统计
+    columns do
+      column do
+        panel "推广产品统计" do
+          render 'admin/promostats/product_stats'
+        end
+      end
+    end
     
   end
   
