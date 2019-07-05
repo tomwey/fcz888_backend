@@ -77,12 +77,14 @@ end
       {
         name: '浏览数',
         data: JSON.parse('<%= raw views.to_json %>'),
-        type: 'line'
+        type: 'line',
+        smooth: true
       },
       {
         name: '点击数',
         data: JSON.parse('<%= raw clicks.to_json %>'),
-        type: 'line'
+        type: 'line',
+        smooth: true
       }
     ]
   };

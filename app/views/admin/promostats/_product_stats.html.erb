@@ -77,12 +77,14 @@ end
       {
         name: 'PV',
         data: JSON.parse('<%= raw pv_data.to_json %>'),
-        type: 'line'
+        type: 'line',
+        smooth: true
       },
       {
         name: 'UV',
         data: JSON.parse('<%= raw uv_data.to_json %>'),
-        type: 'line'
+        type: 'line',
+        smooth: true
       }
     ]
   };
