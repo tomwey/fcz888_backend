@@ -384,3 +384,21 @@ a.member_link, .table_actions a {
     }
   }
 }
+
+.list {
+  .index_table {
+    .btn {
+      background-color: #5E6469;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      display: inline-block;
+      -webkit-transition: border 0.2s linear, color 0.2s linear, width 0.2s linear, background-color 0.2s linear;
+      -o-transition: border 0.2s linear, color 0.2s linear, width 0.2s linear, background-color 0.2s linear;
+      transition: border 0.2s linear, color 0.2s linear, width 0.2s linear, background-color 0.2s linear;
+      cursor: pointer;
+      padding: 2px 9px;
+      margin-right: 4px;
+    }
+  }
+}

@@ -49,8 +49,6 @@ show do
   panel 'PV/UV统计' do
     render 'stats', { channel: promo_channel }
   end
-  
-  # active_admin_comments
 end
 
 end

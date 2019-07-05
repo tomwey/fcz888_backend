@@ -121,6 +121,35 @@ form do |f|
   actions
 end
 
+show do
+  attributes_table do
+    row :uniq_id
+    row :name
+    row('LOGO') { |o| image_tag o.logo.url(:large) }
+    row :min_money
+    row :max_money
+    row :min_length
+    row :max_length
+    row :length_type
+    row :intro
+    row :speed
+    row :tags
+    row :pass_rate
+    row :loan_rate
+    row :conditions
+    row :body_url
+    row :body
+    row :opened_at
+    row :deleted_at
+    row :sort
+    row :opened
+    row :created_at
+  end
+  panel 'PV/UV统计' do
+    render 'stats', { product: loan_product }
+  end
+end
+
 end
 
 # t.string :name, null: false, default: ''

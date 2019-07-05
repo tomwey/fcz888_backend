@@ -1,17 +1,17 @@
 <% 
-total_pv = LoanProductTrack.count
-total_uv = LoanProductTrack.count('DISTINCT concat(ip,user_agent)')
+total_pv = LoanProductTrack.where(product_id: product.id).count
+total_uv = LoanProductTrack.where(product_id: product.id).count('DISTINCT concat(ip,user_agent)')
 
-today_pv = LoanProductTrack.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
-today_uv = LoanProductTrack.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count('DISTINCT concat(ip,user_agent)')
+today_pv = LoanProductTrack.where(product_id: product.id).where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count
+today_uv = LoanProductTrack.where(product_id: product.id).where(created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count('DISTINCT concat(ip,user_agent)')
 
-yes_pv = LoanProductTrack.where(created_at: (Time.zone.now - 1.days).beginning_of_day..(Time.zone.now - 1.days).end_of_day).count
-yes_uv = LoanProductTrack.where(created_at: (Time.zone.now - 1.days).beginning_of_day..(Time.zone.now - 1.days).end_of_day).count('DISTINCT concat(ip,user_agent)')
+yes_pv = LoanProductTrack.where(product_id: product.id).where(created_at: (Time.zone.now - 1.days).beginning_of_day..(Time.zone.now - 1.days).end_of_day).count
+yes_uv = LoanProductTrack.where(product_id: product.id).where(created_at: (Time.zone.now - 1.days).beginning_of_day..(Time.zone.now - 1.days).end_of_day).count('DISTINCT concat(ip,user_agent)')
 
 # 按时间统计
-pv_hash = LoanProductTrack.order('DATE(created_at)').group("DATE(created_at)").where('DATE(created_at) <= ?', Time.zone.now.to_date).count()
+pv_hash = LoanProductTrack.order('DATE(created_at)').group("DATE(created_at)").where(product_id: product.id).where('DATE(created_at) <= ?', Time.zone.now.to_date).count()
 
-uv_hash = LoanProductTrack.order('DATE(created_at)').group("DATE(created_at)").where('DATE(created_at) <= ?', Time.zone.now.to_date).count('DISTINCT concat(ip,user_agent)')
+uv_hash = LoanProductTrack.order('DATE(created_at)').group("DATE(created_at)").where(product_id: product.id).where('DATE(created_at) <= ?', Time.zone.now.to_date).count('DISTINCT concat(ip,user_agent)')
 
 dates = []
 pv_data = []
@@ -29,10 +29,10 @@ days.times do |n|
 end
 
 # 按渠道统计
-chn_ids = LoanProductTrack.pluck(:channel_id).uniq
+chn_ids = LoanProductTrack.where(product_id: product.id).pluck(:channel_id).uniq
 chns = PromoChannel.where(id: chn_ids).pluck(:id, :name, :uniq_id)
-chn_pv_hash = LoanProductTrack.group("channel_id").count()
-chn_uv_hash = LoanProductTrack.group("channel_id").count('distinct concat(ip,user_agent)')
+chn_pv_hash = LoanProductTrack.where(product_id: product.id).group("channel_id").count()
+chn_uv_hash = LoanProductTrack.where(product_id: product.id).group("channel_id").count('distinct concat(ip,user_agent)')
 
 chn_names = []
 chn_pv_data = []
@@ -44,27 +44,7 @@ chns.each do |chn|
   chn_names << chn[1]
   chn_pv_data << (chn_pv_hash[chn[0]] || 0).to_s
   chn_uv_data << (chn_uv_hash[chn[0]] || 0).to_s
-  chn_data << { _id: chn[0], name: chn[1], id: chn[2], pv: (chn_pv_hash[chn[0]] || 0).to_s, uv: (chn_uv_hash[chn[0]] || 0).to_s }
-end
-
-# 按产品统计
-product_ids = LoanProductTrack.pluck(:product_id).uniq
-products = LoanProduct.where(id: product_ids).select(:id, :name, :logo, :uniq_id)
-
-prod_pv_hash = LoanProductTrack.group("product_id").count()
-prod_uv_hash = LoanProductTrack.group("product_id").count('distinct concat(ip,user_agent)')
-
-prod_names = []
-prod_pv_data = []
-prod_uv_data = []
-
-prod_data = []
-
-products.each do |prod|
-  prod_names << prod.name
-  prod_pv_data << (prod_pv_hash[prod.id] || 0).to_s
-  prod_uv_data << (prod_uv_hash[prod.id] || 0).to_s
-  prod_data << { _id: prod.id, name: prod.name, id: prod.uniq_id, pv: (prod_pv_hash[prod.id] || 0).to_s, uv: (prod_uv_hash[prod.id] || 0).to_s, logo: prod.logo.url(:large) }
+  chn_data << { name: chn[1], id: chn[2], pv: (chn_pv_hash[chn[0]] || 0).to_s, uv: (chn_uv_hash[chn[0]] || 0).to_s }
 end
 
  %>
@@ -116,6 +96,7 @@ end
         <% end %>
       </table>
     </div>
+    
     <h4>按渠道汇总</h4>
     <div id="graph3" style="width: 100%; height: 300px;"></div>
     <div class="list">
@@ -126,7 +107,6 @@ end
             <th>渠道名字</th>
             <th>PV</th>
             <th>UV</th>
-            <th>操作</th>
           </tr>
         </thead>
         <% chn_data.each do |data| %>
@@ -135,38 +115,6 @@ end
           <td><%= data[:name] %></td>
           <td><%= data[:pv] %></td>
           <td><%= data[:uv] %></td>
-          <td><%= link_to '查看明细', admin_promo_channel_path(data[:_id]), class: 'btn', target: '_blank' %></td>
-        </tr>
-        <% end %>
-      </table>
-    </div>
-    
-    <!-- 按产品 -->
-    <h4>按产品汇总</h4>
-    <div id="graph4" style="width: 100%; height: 300px;"></div>
-    <div class="list">
-      <table class="index_table">
-        <thead>
-          <tr>
-            <th>产品ID</th>
-            <th>产品信息</th>
-            <th>PV</th>
-            <th>UV</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <% prod_data.each do |data| %>
-        <tr>
-          <td><%= data[:id] %></td>
-          <td>
-            <div>
-              <img src="<%= data[:logo] %>">
-              <p><%= data[:name] %></p>
-            </div>
-          </td>
-          <td><%= data[:pv] %></td>
-          <td><%= data[:uv] %></td>
-          <td><%= link_to '查看明细', admin_loan_product_path(data[:_id]), class: 'btn', target: '_blank' %></td>
         </tr>
         <% end %>
       </table>
@@ -215,7 +163,5 @@ end
   drawLineGraph('graph2', '<%= raw dates.to_json %>', '<%= raw pv_data.to_json %>', '<%= raw uv_data.to_json %>');
   
   drawLineGraph('graph3', '<%= raw chn_names.to_json %>', '<%= raw chn_pv_data.to_json %>', '<%= raw chn_uv_data.to_json %>');
-  
-  drawLineGraph('graph4', '<%= raw prod_names.to_json %>', '<%= raw prod_pv_data.to_json %>', '<%= raw prod_uv_data.to_json %>');
   
 </script>
