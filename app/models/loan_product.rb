@@ -164,6 +164,31 @@ class LoanProduct < ActiveRecord::Base
     self.save!
   end
   
+  # 模拟申请人数
+  def apply_count
+    count = $redis.get "p#{self.uniq_id}"
+    if count.blank?
+      count = rand(2000...5000)
+      $redis.set "p#{self.uniq_id}", "#{count}_#{Time.zone.now.to_i}"
+      return count
+    else
+      arr = count.split('_')
+      if arr.size != 2
+        val = rand(2000...5000)
+        $redis.set "p#{self.uniq_id}", "#{val}_#{Time.zone.now.to_i}"
+        return val
+      end
+      old = arr[0].to_i
+      time = arr[1].to_i
+      new_time = Time.zone.now.to_i
+      if new_time - time >= 3600 # 每一个小时随机增加
+        old = old + 5 + rand(0...30)
+        $redis.set "p#{self.uniq_id}", "#{old}_#{Time.zone.now.to_i}"
+      end
+      return old
+    end
+  end
+  
 end
 
 # t.integer :uniq_id
