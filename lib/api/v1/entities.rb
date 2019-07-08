@@ -774,7 +774,8 @@ module API
         expose :tag_names, as: :tags
         expose :condition_data, as: :conditions, using: API::V1::Entities::LoanCondition
         expose :view_count
-        expose :order_count, as: :apply_count
+        # expose :order_count, as: :apply_count
+        expose :apply_count
         expose :body_url, as: :link
       end
       
